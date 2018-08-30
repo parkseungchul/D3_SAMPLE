@@ -28,15 +28,3 @@
  ### hAxis01[hAxis01.html](WebContent/temp/horizontal/axis/hAxis01.html) 템플릿 05
  - include horizontal05 function
  - add horizontal axis **<u>this is not static code ( ratio calculate )</u>**
-
-
-
-
-
-![screenshot](https://github.com/parkseungchul/D3_SAMPLE/blob/master/WebContent/verticalChart.PNG?raw=true)
-
-### Vertical chart 01 [vertical01.html](WebContent/vertical01.html) 기본 샘플
-
-### Vertical chart 02 [vertical01.html](WebContent/vertical01.html) 정규화 
-
-### Vertical chart 03 [vertical01.html](WebContent/vertical01.html) 움직임 추가
