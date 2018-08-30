@@ -29,6 +29,7 @@
     <script>
     $(document).ready(function() {
 
+        // #### CUSTOM AREA ####################################################################
         // about width start
         // 넓이는 col-md-6으로 인해 정해져 있음
         // 정해져 있는 넓이를 쪼개서 써야 할 경우 사용
@@ -39,16 +40,16 @@
         // 그래픽의 구성에 따라 수동으로 넣어주어야 함
         // #target & #myGraph 높이를 설정
 
+        var h = 300;
         var w =  $('#target').width();
-                 $('#target').height(200);
+                 $('#target').height(h);
         $('#myGraph').width(w);
-        $('#myGraph').height(200);
+        $('#myGraph').height(h);
 
         // about width & height end
 
-
         // date area
-        var dataSet1 = [ 20, 40, 60, 80, 100 ];
+        var dataSet = [ 20, 40, 60, 80, 100 ];
 
         //변수 모음
         var x = 10;
@@ -58,22 +59,24 @@
         var viewW = w * 0.9;         // 넓이의 일정 비율을 잘라 그래프가 잘리지 않도록 함
         var rate = viewW/dataMax;    // 비율을 넓이에 곱하게 함
 
+        // #### CUSTOM AREA ####################################################################
+
+
 
         // 그래프 축
         var xScale = d3.scale.linear()
             .domain([0,dataMax])         // 데이터 범위
             .range([0,viewW]);           // 출력 크기
 
-
         // jquery  결과창 값 넣기
-        $('#result').text(dataSet1);
-
+        $('#result').text(dataSet);
 
         // graph area
-        d3.select("#myGraph")
+        var barElemnets = d3.select("#myGraph")
             .selectAll("rect")
-            .data(dataSet1)
-            .enter()
+            .data(dataSet);
+
+        barElemnets.enter()
             .append("rect")
             .attr("x", x)
             .attr("y", function (d, i){
@@ -91,37 +94,84 @@
             .attr("height" ,barheight +"px");
 
         // 그룹화
-        d3.select("#myGraph")
+        var  axisElements = d3.select("#myGraph")
             .append("g")
             .attr("class", "axis")
-            .attr("transform", "translate("+x+"," + (( 1 + dataSet1.length ) * barheight + barMargin )+")")
+            .attr("transform", "translate("+x+"," + (( dataSet.length ) * (barheight + barMargin) )+")")
             .call(d3.svg.axis()
                 .scale(xScale)
             )
 
+        // 클릭 액션 추가
+        barElemnets.on("click", function(){
+                d3.select(this).style("fill", "cyan");
+            })
+
         // 버튼 액션
         d3.select("#updateButton")
             .on("click", function () {
-                //  효과를 위해 다시 정의
-                for(var i=0; i< dataSet1.length; i ++){
-                    dataSet1[i] = Math.floor(Math.random() * dataMax);
+                // #### CUSTOM AREA ####################################################################
+                //  변경되는 액션을 다시 보여주기 위해
+                dataSet = new Array();
+                var length = Math.floor(Math.random() * 10);
+                if (length < 1){
+                    length = 2;
                 }
+                for(var i=0; i< length; i ++){
+                    dataSet[i] = Math.floor(Math.random() * dataMax);
+                }
+                // #### CUSTOM AREA ####################################################################
                 // jquery  결과창 값 넣기
-                $('#result').text(dataSet1);
+                $('#result').text(dataSet);
 
-             d3.select("#myGraph")
+             var barElemnets1 = d3.select("#myGraph")
                  .selectAll("rect")
-                 .data(dataSet1)
-                 .style("fill", "red")
-                 .attr("width", "0px")
-                 .transition()            // 애니매이션
-                 .delay(function(d, i){  // 0.05초 마다 그리기
-                     return i * 50;
-                 })
-                 .duration(1000)      // 1초내에 표현
-                 .attr("width", function (d, i) {
-                     return (d * rate) + "px";
-                 });
+                 .data(dataSet)
+
+                // init loading
+                barElemnets1.enter()
+                    .append("rect")
+                    .style("fill", "red")
+                    .attr("width", "0px")
+                    .transition()            // 애니매이션
+                    .delay(function(d, i){  // 0.05초 마다 그리기
+                         return i * 50;
+                     })
+                    .duration(1000)      // 1초내에 표현
+                    .attr("width", function (d, i) {
+                        return (d * rate) + "px";
+                    });
+
+                 // update action
+                 barElemnets1
+                     .attr("width", "0px")
+                     .transition()            // 애니매이션
+                     .delay(function(d, i){  // 0.05초 마다 그리기
+                         return i * 50;
+                     })
+                     .duration(1000)      // 1초내에 표현
+                     .attr("width", function (d, i){
+                         return (d * rate) + "px";
+                     })
+                     .attr("x", x)
+                     .attr("y", function (d, i){
+                         return i *  (barheight + barMargin);
+                     })
+                     .attr("height" ,barheight +"px")
+                     .style("fill", "red");
+
+                 // delete action
+                 barElemnets1
+                     .exit()
+                     .remove();
+
+                // add click action
+                barElemnets1.on("click", function(){
+                    d3.select(this).style("fill", "cyan");
+                })
+
+                // horizontal axis move
+               axisElements.attr("transform", "translate("+ x +"," + (( dataSet.length ) * (barheight + barMargin) )+")")
             });
     });
     </script>
@@ -129,17 +179,15 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
-            TEST
-        </div>
-        <div id="target" class="col-md-6">
-            <svg id="myGraph"></svg>
-        </div>
         <div class="col-md-6">
             <button id='updateButton' type="button" class="btn btn-outline-primary">Change</button>
         </div>
         <div class="col-md-6">
             <div id="result"></div>
+        </div>
+        <hr>
+        <div id="target" class="col-md-12">
+            <svg id="myGraph"></svg>
         </div>
     </div>
 </div>
