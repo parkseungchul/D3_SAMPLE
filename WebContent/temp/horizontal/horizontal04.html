@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <style>
+        svg {
+            border: 1px solid black;
+        }
+        #myGraph rect {
+            stroke: rgb(160, 0, 0);
+            stroke-width: 1px;
+            fill: rgb(255,0,0);
+        }
+    </style>
+    <script>
+    $(document).ready(function() {
+
+        // about width start
+        // 넓이는 col-md-6으로 인해 정해져 있음
+        // 정해져 있는 넓이를 쪼개서 써야 할 경우 사용
+        // #target & #myGraph 넓이를 설정
+
+        // about height start
+        // 높이는 어떻게 사용자 지정
+        // 그래픽의 구성에 따라 수동으로 넣어주어야 함
+        // #target & #myGraph 높이를 설정
+
+        var w =  $('#target').width();
+                 $('#target').height(200);
+        $('#myGraph').width(w);
+        $('#myGraph').height(200);
+
+        // about width & height end
+
+        // date area
+        var dataSet1 = [ 300, 130, 5, 60, 240 ];
+        //var dataSet2= [ 240, 60, 5, 130, 240 ];
+
+        // jquery  결과창 값 넣기
+        $('#result').text(dataSet1);
+
+        // graph area
+        d3.select("#myGraph")
+            .selectAll("rect")
+            .data(dataSet1)
+            .enter()
+            .append("rect")
+            .attr("x", 0)
+            .attr("y", function (d, i){
+                return i * 35;
+            })
+            .attr("width", "0px")
+            .transition()            // 애니매이션
+            .delay(function(d, i){  // 0.05초 마다 그리기
+                return i * 50;
+            })
+            .duration(1000)      // 1초내에 표현
+            .attr("width", function (d, i){
+                return d + "px";
+            })
+            .attr("height","20px");
+
+
+        d3.select("#updateButton")
+            .on("click", function () {
+                // 데이터를 별도로 뺌
+                //  var dataSet2= [ 240, 60, 5, 130, 240 ];
+                //  효과를 위해 다시 정의
+                for(var i=0; i< dataSet1.length; i ++){
+                    dataSet1[i] = Math.floor(Math.random() * w);
+                }
+                // jquery  결과창 값 넣기
+                $('#result').text(dataSet1);
+
+             d3.select("#myGraph")
+                 .selectAll("rect")
+                 .data(dataSet1)
+                 .attr("width", "0px")
+                 .transition()            // 애니매이션
+                 .delay(function(d, i){  // 0.05초 마다 그리기
+                     return i * 50;
+                 })
+                 .duration(1000)      // 1초내에 표현
+                 .attr("width", function (d, i) {
+                     return d + "px";
+                 });
+
+            });
+
+
+
+    });
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div id="target" class="col-md-6">
+            <svg id="myGraph"></svg>
+        </div>
+        <div class="col-md-6">
+            <button id='updateButton' type="button" class="btn btn-outline-primary">Change</button>
+        </div>
+        <div class="col-md-6">
+            <div id="result"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

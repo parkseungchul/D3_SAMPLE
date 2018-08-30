@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script>
+    $(document).ready(function() {
+        var dataSet = [ 300, 130, 5, 60, 240 ];
+        d3.select("#myGraph1")
+            .selectAll("rect")
+            .data(dataSet)
+            .enter()
+            .append("rect")
+            .attr("x", 0)
+            .attr("y", function(d, i){
+                return i * 25;
+            })
+            .attr("width", function(d, i){
+                return d + "px";
+            })
+            .attr("height", "20px")
+
+        d3.select("#myGraph2")
+            .selectAll("rect")
+            .data(dataSet)
+            .enter()
+            .append("rect")
+            .attr("x", 0)
+            .attr("y", function(d, i){
+                return i * 25;
+            })
+            .attr("width", function(d, i){
+                return d + "px";
+            })
+            .attr("height", "20px")
+
+    });
+    </script>
+</head>
+<body>
+<svg id="myGraph1"></svg>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <svg id="myGraph2"></svg>
+        </div>
+    </div>
+</div>
+<div class="jumbotron text-center">
+    <svg id="myGraph"></svg>
+</div>
+
+</body>
+</html>
