@@ -2,7 +2,7 @@
 
 ## bootstrap4 jquery d3 
 
-### defaultD3[defaultD3.html](template/defaultD3.html) 
+### defaultD3[defaultD3.html](template/defaultBs4.html) 
 - jquery, bootstrap, d3 준비 
 - bootstrap 기본 화면 
  
@@ -46,7 +46,12 @@
   - include circle02 function
   - add text
   
-### circle04[circle04.html](template/circle/circle03.html) 
+### circle04[circle04.html](template/circle/circle04.html) 
   - include circle03 function
   - add value text
   - add mouseover action
+  
+ ### vertical[vertical01.html](template/vertical/vertical01.html) 
+   - include [defaultD3.html](template/defaultD3.html)
+   - add vertical graph 
+   - add text to bar
