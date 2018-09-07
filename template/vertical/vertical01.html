@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <style>
+        svg {
+            border: 1px solid black;
+        }
+        .bar {
+            fill: cadetblue;
+        }
+        .textCenter {
+            text-anchor:middle;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            // Common Area Start
+            var h = 400;
+            var w = $('#target').width();
+            $('#target').height(h);
+            $('#myGraph').width(w);
+            $('#myGraph').height(h);
+            console.log('w: ' + w) ;
+            console.log('h: ' + h );
+            // Common Area End
+
+            // Variable Area Start
+            var dataSet = [ 120, 70, 175, 80 ,220];
+            var svgHeight = h;
+            var barWidth = 30;
+            var barMargin = 50;
+
+            // Variable Area End
+
+
+
+            // Vertical Area Start
+            barElements = d3.select("#myGraph")
+                .selectAll("rect")
+                .data(dataSet)
+
+            // set data
+            barElements.enter()
+                .append("rect")
+                .attr("class", "bar")
+                .attr("height", function(d, i){
+                    return d;
+                })
+                .attr("width", barWidth)
+                .attr("x", function(d, i){
+                    return i * (barWidth + barMargin);
+                })
+                .attr("y", function(d, i){
+                    return svgHeight - d;
+                })
+
+            // set text
+            barElements.enter()
+                .append("text")
+                .attr("class", "textCenter")
+                .attr("x", function(d, i){
+                    return (( barWidth + barMargin )*i ) + ( barWidth/2 ) ;
+                })
+                .attr("y",svgHeight - 5)
+                .text(function(d, i){
+                    return d;
+                })
+
+            // Vertical Area End
+
+
+
+
+        });
+    </script>
+</head>
+<body>
+
+    <div class="row">
+        <div class="col-md-2"/>
+        <div id="target" class="col-md-10">
+            <svg id="myGraph"></svg>
+        </div>
+        <div class="col-md-2"/>
+    </div>
+
+</body>
+</html>
