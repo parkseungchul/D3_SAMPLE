@@ -2,7 +2,7 @@
 
 ## bootstrap4 jquery d3 
 
-### 스크립트 도입부에 변수들만 세팅하면 그래프가 문제없이 표현 되도록 하드코딩을 최대한 자제하고 어디든 붙일 수 있도록 코딩
+### 스크립트 도입부에 변수들만 세팅하면 그래프가 문제없이 표현 되도록 하드코딩 배제 어디든 붙 일 수 있도록 코딩
 
 ### defaultD3 [defaultD3.html](template/defaultBs4.html) 
 - jquery, bootstrap, d3 준비 
