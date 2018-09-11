@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- 
+   여러개 데이터가 있을 경우 
+ -->
+<title>Line Chart3</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<style>
+//svg { border: 1px solid black; }
+.line, 
+.axis line, 
+.axis path 
+.axis_x line { fill: none; stroke: black; }
+.axis text { font-family:s ans-serif; font-size: 11px; }
+.itemA { stroke: red;  fill:none;}
+.itemB { stroke: green;  fill:none;}
+.itemC { stroke: blue;  fill:none;}
+</style>
+<script>
+$(document).ready(function(){
+    var h = 800;
+    var w = $('#target').width();
+    $('#target').height(h);
+    $('#myGraph').width(w);
+    $('#myGraph').height(h);
+    
+    var svgHeight = $('#myGraph').height();
+    var svgWidth  = $('#myGraph').width(); 
+    
+    var offsetX = 30;
+    var offsetY = 20;
+    var scale = 3.0;
+    var maxValue = 200;
+    
+    // dataSet Area
+    var dataSet1 = [50,40,30,80,60,70,80,90,190,180,60,40,20];
+    var dataSet2 = [20,30,20,60,20,50,60,70,10,10,10,100,200];
+    var dataSet3 = [10,40,80,190,150,110,150,100,90,70,60,50,40];
+    var margin = svgWidth/(dataSet1.length - 1 );
+    
+    function drawGraph(dataSet, cssClassName, type){
+        var line = d3.svg.line()
+                         .x(function(d,i){
+       	                     return offsetX +  i * margin ;
+                         })
+                         .y(function(d,i){
+       	                     return svgHeight  -  (d * scale) - offsetY  ; 
+                          })
+                          .interpolate(type)
+        var lineElements = d3.select("#myGraph")
+                             .append("path")
+                             .attr("class", cssClassName)
+                             .attr("d", line(dataSet));
+    }
+    
+    
+    function drawSclae(){
+        var yScale = d3.scale.linear()
+        .domain([0, maxValue])
+        .range([scale*maxValue, 0]);
+		d3.select("#myGraph")
+		.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate("+offsetX+","+ ((svgHeight-(maxValue*scale)-offsetY))+")")
+		.call(
+		 d3.svg.axis()
+		   .scale(yScale)
+		   .orient("left")
+		)
+    }
+
+    drawGraph(dataSet1, "itemA", "linear");
+    drawGraph(dataSet2, "itemB", "basis");
+    drawGraph(dataSet3, "itemC", "monotone");
+    drawSclae();
+    
+    
+    d3.select("#myGraph")
+      .append("rect")
+      .attr("class", "axis_x")
+      .attr("width", svgWidth)
+      .attr("height", 1)
+      .attr("transform", "translate("+offsetX+","+(svgHeight-offsetY-0.5)+")")
+	
+});
+</script>
+<body>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div id="target" class="col-md-8">
+            <svg id="myGraph"></svg>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+</body>
+</html>
