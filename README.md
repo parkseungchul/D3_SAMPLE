@@ -2,7 +2,16 @@
 
 ## bootstrap4 jquery d3 
 
-### 스크립트 도입부에 변수들만 세팅하면 그래프가 문제없이 표현 되도록 하드코딩 배제 어디든 붙 일 수 있도록 코딩
+#### 스크립트 도입부에 변수들만 세팅하면 그래프가 문제없이 표현 되도록 하드코딩 배제
+#### 바로 카피해서 쓸 수 있도록 템플릿화 했음
+<code>
+    <div class="row">
+        <div id="target" class="col-md-12">
+            <svg id="myGraph"></svg>
+        </div>
+    </div>
+</code>
+#### target -- myGraph 가 반드시 존재 
 
 ### defaultD3 [defaultD3.html](template/defaultBs4.html) 
 - jquery, bootstrap, d3 준비 
