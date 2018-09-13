@@ -84,3 +84,15 @@
 ### line [line06.html](template/line/line06.html) 
   - include line05
   - horizontal text  x axis  
+  
+### line [line07.html](template/line/line07.html) 
+  - include line06
+  - auto set 
+  
+### table2chart [table2json.html](template/table2chart/table2json.html) 
+  - table to json data
+  - auto set   
+  
+### table2chart [table2json2line.html](template/table2chart/table2json2line.html) 
+  - include table2chart
+  - table -> json -> line chart    
