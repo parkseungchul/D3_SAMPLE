@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Template</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script>
+        $(document).ready(function() {
+            /**
+                반드시 맞춰야 할 명명규칙
+                resultTable1 > thead
+                resultTable1 > tbody
+             */
+            var headers1 = new Array();
+            $('#resultTable1 >  thead > tr').each(function(){
+                var $tr = $(this);
+                $tr.find("td").each(function(tdCnt){
+                    var $td = $(this);
+                    headers1.push($td.text());
+                });
+            });
+
+            var tableData1 = new Array();
+            $('#resultTable1 >  tbody > tr').each(function(){
+                var $tr = $(this);
+                var trData1 = new Array();
+                $tr.find("td").each(function(tdCnt){
+                    var tdData1 = new Object();
+                    var $td = $(this);
+                    console.log(tdCnt);
+                    tdData1.date = headers1[tdCnt];
+                    tdData1.value = parseFloat($td.text());
+                    console.log(tdData1.date +' '+ tdData1.value);
+                    trData1.push(tdData1);
+                })
+                tableData1.push(trData1);
+            });
+            var tableResults1 = JSON.stringify(tableData1);
+            var tableJson1 = JSON.parse(tableResults1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+            <table id='resultTable1' class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <td>20180101</td>
+                        <td>20180102</td>
+                        <td>20180103</td>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1.1</td>
+                    <td>2.2</td>
+                    <td>3.3</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>22</td>
+                    <td>33</td>
+                </tr>
+                <tr>
+                    <td>111</td>
+                    <td>222</td>
+                    <td>333</td>
+                </tr>
+                <tr>
+                    <td>1111</td>
+                    <td>2222</td>
+                    <td>3333</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
