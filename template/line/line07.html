@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Line Chart5</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<style>
+    //svg { border: 1px solid black; }
+    .line,
+    .axis line,
+    .axis path
+    .axis_x line { fill: none; stroke: black; }
+    .axis text { font-family:s ans-serif; font-size: 11px; }
+    .itemA { stroke: red;  stroke-width: 2.5; fill:none;}
+    .itemB { stroke: green; stroke-width: 2.5; fill:none;}
+    .itemC { stroke: blue; stroke-width: 2.5; fill:none;}
+</style>
+<script>
+    $(document).ready(function(){
+        var dataSet  =
+            [
+                [
+                    {"date":"20180101",value:1.1},
+                    {"date":"20180102",value:2.2},
+                    {"date":"20180103",value:3.3}
+                ],
+                [
+                    {"date":"20180101",value:11},
+                    {"date":"20180102",value:22},
+                    {"date":"20180103",value:33}
+                ],
+                [
+                    {"date":"20180101",value:111},
+                    {"date":"20180102",value:222},
+                    {"date":"20180103",value:100}
+                ],
+                [
+                    {"date":"20180101",value:11},
+                    {"date":"20180102",value:22},
+                    {"date":"20180103",value:33}
+                ]
+            ];
+        // User Edit Area Start
+        var startDate = "20180101";
+        var endDate   = "20180103"
+
+        // 데이터 기간의 길이
+        var dateLength = 3;
+
+        // 데이터를 검색하여 맥스값을 정하여 높이와 스켸일을 정합니다.
+        var maxData = 400;
+        var offsetX = 0;
+        var offsetY = 0;
+
+        var dateLen = startDate.length;
+        if( dateLen == 8){
+            $('#myGraph').css("padding-top"  ,  "5em");
+            $('#myGraph').css("padding-bottom", "5em");
+        }else if( dateLen == 6){
+            $('#myGraph').css("padding-top"  ,  "3em");
+            $('#myGraph').css("padding-bottom", "3em");
+        }else{
+            $('#myGraph').css("padding-top"  ,  "2em");
+            $('#myGraph').css("padding-bottom", "2em");
+        }
+
+        var maxDataLen = String(maxData).length;
+        if( maxDataLen > 10){
+            $('#myGraph').css("padding-left" , "5em");
+            $('#myGraph').css("padding-right", "5em");
+        }else if( maxDataLen < 10 && maxDataLen > 5){
+            $('#myGraph').css("padding-left" , "3em");
+            $('#myGraph').css("padding-right", "3em");
+        }else{
+            $('#myGraph').css("padding-left" , "2em");
+            $('#myGraph').css("padding-right", "2em");
+        }
+
+        var w = $('#target').width() - 100;
+
+        // 그래프에 허용되는 높이값을 정의합니다. 크기가 클 경우 가시성이 떨어집니다.
+        var h = 500 + offsetY;
+        // User Edit Area End
+
+        // Auto Calculate Start;
+        var scale =  (h/maxData);
+        var delimiter = "/";
+        var format;
+        if(startDate.length == 4){
+            format =  "%Y";
+        }else if(startDate.length == 6){
+            format =  "%Y %m";
+            startDate  = startDate.substring(0,4) + delimiter + startDate.substring(5,6);
+            endDate    = endDate.substring(0,4)   + delimiter + endDate.substring(5,6);
+        }else if(startDate.length == 8){
+            format =  "%Y %m %d";
+            startDate  = startDate.substring(0,4) + delimiter + startDate.substring(5,6) + delimiter + startDate.substring(7,8);
+            endDate    = endDate.substring(0,4)   + delimiter + endDate.substring(5,6)   + delimiter + endDate.substring(7,8);
+        }
+        // Auto Calculate End;
+
+
+        $('#target').height(h);
+        $('#myGraph').width(w);
+        $('#myGraph').height(h);
+        var svgHeight = $('#myGraph').height();
+        var svgWidth  = $('#myGraph').width();
+        var margin = svgWidth/(dataSet[0].length - 1 );
+
+        function drawGraph(dataSet, itemName,cssClassName, type){
+            var line = d3.svg.line()
+                .x(function(d,i){
+                    return offsetX +  i * margin ;
+                })
+                .y(function(d,i){
+                    return svgHeight  -  (d.value * scale) - offsetY  ;
+                })
+                .interpolate(type)
+            var lineElements = d3.select("#myGraph")
+                .append("path")
+                .attr("class", cssClassName)
+                .attr("d", line(dataSet))
+        }
+
+        function drawSclae(){
+            var yScale = d3.scale.linear()
+                .domain([0, maxData])
+                .range([scale*maxData, 0]);
+            d3.select("#myGraph")
+                .append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate("+offsetX+","+ ((svgHeight-(maxData*scale)-offsetY))+")")
+                .call(
+                    d3.svg.axis()
+                        .scale(yScale)
+                        .orient("left")
+                )
+
+            var xScale = d3.time.scale()
+                .domain([new Date(startDate), new Date(endDate)])
+                .range([0, svgWidth])
+
+            d3.select("#myGraph")
+                .append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate("+offsetX+","+ (svgHeight -offsetY)+")")
+                .call(
+                    d3.svg.axis()
+                        .scale(xScale)
+                        .orient("bottom")
+                        .ticks(dateLength-1)
+                        .tickFormat(d3.time.format(format))
+                )
+                .selectAll("text")
+                .attr("transform", "rotate(90)")
+                .attr("dx", "0.7em")
+                .attr("dy", "-0.4em")
+                .style("text-anchor", "start")
+        }
+
+        drawGraph(dataSet[0] ,"item1", "itemA", "linear");
+        drawGraph(dataSet[1] ,"item2", "itemB", "basis");
+        drawGraph(dataSet[2] ,"item3", "itemC", "monotone");
+        drawSclae();
+
+
+        d3.select("#myGraph")
+            .append("rect")
+            .attr("class", "axis_x")
+            .attr("width", svgWidth)
+            .attr("height", 1)
+            .attr("transform", "translate("+offsetX+","+(svgHeight-offsetY-0.5)+")")
+
+    });
+</script>
+<body>
+<div class="row">
+    <div class="col-md-12">
+        <BR><BR><BR><BR><BR><BR><BR><BR>
+    </div>
+    <div id="target" class="col-md-12">
+        <svg id="myGraph"></svg>
+    </div>
+    <div class="col-md-12">
+        <BR><BR><BR><BR><BR><BR><BR><BR>
+    </div>
+</div>
+</body>
+</html>
