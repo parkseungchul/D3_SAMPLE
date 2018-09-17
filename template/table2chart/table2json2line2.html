@@ -14,6 +14,10 @@
         .axis_x line { fill: none; }
         .axis text { font-family:s ans-serif; font-size: 10px; }
         .lines {stroke-width: 2.5; fill:none;}
+        .bold {
+            font-weight: bold;
+            font-size: 15pt;
+        }
     </style>
 
     <script>
@@ -122,10 +126,30 @@
                     .style("stroke", autoColor(colorNum))
                     .attr("d", line(dataSet))
                     .attr("kind", kind[colorNum])
+                    .attr("kindCnt", colorNum)
                     .on("mouseover", function(d, i){
                         $('#myGraphMsg').text($(this).attr("kind"));
+
+                        var kindCnt = $(this).attr("kindCnt");
+
+                       $('#resultTable1 tbody tr').each(function(i){
+                           var $tr = $(this);
+                           if(i == kindCnt){
+                               $tr.addClass("bold");
+                           }else{
+                               $tr.removeClass("bold");
+                           }
+                       })
+
+
+
+
                     })
             }
+
+
+
+
             function drawSclae(){
                 var yScale = d3.scale.linear()
                     .domain([0, maxData])

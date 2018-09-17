@@ -94,5 +94,13 @@
   - auto set   
   
 ### table2chart [table2json2line.html](template/table2chart/table2json2line.html) 
-  - include table2chart
+  - include table2json
   - table -> json -> line chart    
+
+### table2chart [table2json2line2.html](template/table2chart/table2json2line2.html) 
+  - include table2json2line
+  - mouseover -> table selected
+  
+### table2chart [table2json2line3.html](template/table2chart/table2json2line3.html) 
+  - include table2json3line2
+  - 선 그래프 그림을 함수화하여 사용
